@@ -15,13 +15,13 @@ public:
         this->visited = visited;
     }
 
-    void DFS(int source)
+    void dfs(int source)
     {
         visited[source] = true;
 
         for (int &destination : graph[source])
             if (!visited[destination])
-                DFS(destination);
+                dfs(destination);
 
         nodes.push(source);
     }
@@ -30,7 +30,7 @@ public:
     {
         for (int i = 0; i < graph.size(); ++i)
             if (!visited[i])
-                DFS(i);
+                dfs(i);
 
         while (!nodes.empty())
         {
