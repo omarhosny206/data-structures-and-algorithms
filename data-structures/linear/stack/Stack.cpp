@@ -17,22 +17,19 @@ public:
         this->val = val;
         next = nullptr;
     }
-
-    StackNode(int val, StackNode *next)
-    {
-        this->val = val;
-        this->next = next;
-    }
 };
 
 class Stack
 {
 private:
     StackNode *top;
+    int size;
 
 public:
     Stack()
     {
+        top = nullptr;
+        size = 0;
     }
 
     Stack(int val)
@@ -42,22 +39,25 @@ public:
 
     void push(int val)
     {
-        StackNode *node = new StackNode(val, top);
-        top = node;
+        StackNode *newTop = new StackNode(val);
+        newTop->next = top;
+        top = newTop;
+        size++;
     }
 
     void pop()
     {
         if (isEmpty())
         {
+            cout << "Stack is empty" << endl;
             return;
         }
 
-        StackNode *current = top->next;
-        top = current;
+        top = top->next;
+        size--;
     }
 
-    bool Search(int target)
+    bool search(int target)
     {
         StackNode *current = top;
 
@@ -76,7 +76,7 @@ public:
     {
         if (isEmpty())
         {
-            cout << "Stack is empty --> ";
+            cout << "Stack is empty" << endl;
             return -1;
         }
 
@@ -88,7 +88,12 @@ public:
         return top == nullptr;
     }
 
-    void Print()
+    int getSize()
+    {
+        return size;
+    }
+
+    void print()
     {
         StackNode *current = top;
 
@@ -103,23 +108,29 @@ public:
 int main()
 {
     Stack *stack = new Stack();
-    stack->Push(5);
-    stack->Push(10);
-    stack->Push(15);
-    stack->Push(20);
-    stack->Push(25);
-    cout << stack->Search(10) << endl;
-    cout << stack->Search(8) << endl;
+    stack->pop();
+    stack->push(5);
+    stack->push(10);
+    stack->push(15);
+    stack->push(20);
+    stack->push(25);
+
+    cout << stack->search(10) << endl;
+    cout << stack->search(8) << endl;
     cout << endl;
-    stack->Pop();
+
+    stack->pop();
     cout << stack->getTop() << endl
          << endl;
-    stack->Print();
+
+    stack->print();
     cout << endl
          << endl;
-    stack->Pop();
-    stack->Pop();
-    stack->Pop();
-    stack->Pop();
+
+    stack->pop();
+    stack->pop();
+    stack->pop();
+    stack->pop();
+
     cout << stack->getTop() << endl;
 }
