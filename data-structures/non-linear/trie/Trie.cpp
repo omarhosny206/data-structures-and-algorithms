@@ -10,15 +10,15 @@ public:
 
     TrieNode()
     {
-        this->children = vector<TrieNode *>(26);
-        this->isWord = false;
+        children = vector<TrieNode *>(26);
+        isWord = false;
     }
 
     TrieNode(char val)
     {
         this->val = val;
-        this->children = vector<TrieNode *>(26);
-        this->isWord = false;
+        children = vector<TrieNode *>(26);
+        isWord = false;
     }
 };
 
