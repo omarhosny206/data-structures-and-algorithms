@@ -32,21 +32,21 @@ class BinarySearchTree
 private:
     TreeNode *root;
 
-    TreeNode *Insert(TreeNode *root, int val)
+    TreeNode *insert(TreeNode *root, int val)
     {
         if (root == nullptr)
             return new TreeNode(val);
 
         if (root->val > val)
-            root->left = Insert(root->left, val);
+            root->left = insert(root->left, val);
 
         else
-            root->right = Insert(root->right, val);
+            root->right = insert(root->right, val);
 
         return root;
     }
 
-    TreeNode *Delete(TreeNode *root, int val)
+    TreeNode *remove(TreeNode *root, int val)
     {
         if (root->val == val)
         {
@@ -56,21 +56,21 @@ private:
             else if (root->left)
             {
                 root->val = inOrderPredecessor(root->left);
-                root->left = Delete(root->left, root->val);
+                root->left = remove(root->left, root->val);
             }
 
             else
             {
                 root->val = inOrderSuccessor(root->right);
-                root->right = Delete(root->right, root->val);
+                root->right = remove(root->right, root->val);
             }
         }
 
         else if (root->val > val)
-            root->left = Delete(root->left, val);
+            root->left = remove(root->left, val);
 
         else
-            root->right = Delete(root->right, val);
+            root->right = remove(root->right, val);
 
         return root;
     }
@@ -91,7 +91,7 @@ private:
         return root->val;
     }
 
-    bool Search(TreeNode *root, int target)
+    bool binarySearch(TreeNode *root, int target)
     {
         if (root == nullptr)
             return false;
@@ -100,9 +100,9 @@ private:
             return true;
 
         if (root->val > target)
-            return Search(root->left, target);
+            return binarySearch(root->left, target);
 
-        return Search(root->right, target);
+        return binarySearch(root->right, target);
     }
 
     void getSortedNodes(TreeNode *root, vector<int> &sortedNodes)
@@ -115,15 +115,15 @@ private:
         getSortedNodes(root->right, sortedNodes);
     }
 
-    TreeNode *reConstructBST(TreeNode *root, vector<int> &sortedNodes, int start, int end)
+    TreeNode *reconstructBST(TreeNode *root, vector<int> &sortedNodes, int start, int end)
     {
         if (start > end)
             return nullptr;
 
         int middle = start + (end - start) / 2;
         root = new TreeNode(sortedNodes[middle]);
-        root->left = reConstructBST(root->left, sortedNodes, start, middle - 1);
-        root->right = reConstructBST(root->right, sortedNodes, middle + 1, end);
+        root->left = reconstructBST(root->left, sortedNodes, start, middle - 1);
+        root->right = reconstructBST(root->right, sortedNodes, middle + 1, end);
         return root;
     }
 
@@ -157,7 +157,7 @@ private:
         cout << root->val << endl;
     }
 
-    void levelOrder(TreeNode *root)
+    void bfs(TreeNode *root)
     {
         if (root == nullptr)
             return;
@@ -187,15 +187,15 @@ private:
         }
     }
 
-    void Construct(TreeNode *root, vector<vector<string>> &nodes, int level, int start, int end)
+    void construct(TreeNode *root, vector<vector<string>> &nodes, int level, int start, int end)
     {
         if (root == nullptr)
             return;
 
         int middle = start + (end - start) / 2;
         nodes[level][middle] = to_string(root->val);
-        Construct(root->left, nodes, level + 1, start, middle - 1);
-        Construct(root->right, nodes, level + 1, middle + 1, end);
+        construct(root->left, nodes, level + 1, start, middle - 1);
+        construct(root->right, nodes, level + 1, middle + 1, end);
     }
 
     int getHeight(TreeNode *root)
@@ -217,37 +217,37 @@ public:
     BinarySearchTree(vector<int> &nodes)
     {
         root = new TreeNode(nodes[0]);
-        Print();
+        print();
         cout << endl
              << endl;
         for (int i = 1; i < nodes.size(); ++i)
         {
-            Insert(nodes[i]);
-            Print();
+            insert(nodes[i]);
+            print();
             cout << endl
                  << endl;
         }
     }
 
-    void Insert(int val)
+    void insert(int val)
     {
-        if (Search(val) == false)
-            Insert(root, val);
+        if (binarySearch(val) == false)
+            insert(root, val);
 
         getBalanced();
     }
 
-    void Delete(int val)
+    void remove(int val)
     {
-        if (Search(val) == true)
-            Delete(root, val);
+        if (binarySearch(val) == true)
+            remove(root, val);
 
         getBalanced();
     }
 
-    bool Search(int target)
+    bool binarySearch(int target)
     {
-        return Search(root, target);
+        return binarySearch(root, target);
     }
 
     void getBalanced()
@@ -257,7 +257,7 @@ public:
 
         vector<int> sortedNodes;
         getSortedNodes(root, sortedNodes);
-        root = reConstructBST(root, sortedNodes, 0, sortedNodes.size() - 1);
+        root = reconstructBST(root, sortedNodes, 0, sortedNodes.size() - 1);
     }
 
     bool isBalanced()
@@ -283,16 +283,16 @@ public:
         postOrder(root);
     }
 
-    void levelOrder()
+    void bfs()
     {
-        levelOrder(root);
+        bfs(root);
     }
 
-    void Print()
+    void print()
     {
         int height = getHeight();
         vector<vector<string>> nodes(height, vector<string>(pow(2, height) - 1, " "));
-        Construct(root, nodes, 0, 0, nodes[0].size() - 1);
+        construct(root, nodes, 0, 0, nodes[0].size() - 1);
 
         for (vector<string> &level : nodes)
         {
@@ -311,30 +311,30 @@ public:
 
 int main()
 {
-    BinarySearchTree *tree = new BinarySearchTree(100);
-    tree->Insert(60);
-    tree->Insert(50);
-    tree->Insert(40);
-    tree->Print();
+    BinarybinarySearchTree *tree = new BinarybinarySearchTree(100);
+    tree->insert(60);
+    tree->insert(50);
+    tree->insert(40);
+    tree->print();
     cout << endl
          << endl;
-    tree->Insert(20);
-    tree->Print();
+    tree->insert(20);
+    tree->print();
     cout << endl
          << endl;
-    tree->Insert(120);
-    tree->Print();
+    tree->insert(120);
+    tree->print();
     cout << endl
          << endl;
-    tree->Insert(130);
-    tree->Print();
+    tree->insert(130);
+    tree->print();
     cout << endl
          << endl;
-    tree->Insert(90);
-    tree->Print();
+    tree->insert(90);
+    tree->print();
     cout << endl
          << endl;
-    tree->levelOrder();
+    tree->bfs();
     cout << endl
          << endl;
     tree->preOrder();
