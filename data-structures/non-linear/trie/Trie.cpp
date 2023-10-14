@@ -24,15 +24,16 @@ public:
 
 class Trie
 {
-public:
+private:
     TrieNode *root;
 
+public:
     Trie()
     {
         root = new TrieNode();
     }
 
-    void Insert(string &word)
+    void insert(string &word)
     {
         TrieNode *current = root;
 
@@ -47,7 +48,7 @@ public:
         current->isWord = true;
     }
 
-    bool Search(string &word)
+    bool search(string &word)
     {
         TrieNode *current = root;
 
@@ -62,15 +63,22 @@ public:
         return current->isWord;
     }
 
-    void printAllWords()
+    TrieNode *getStartNode(string &word)
     {
-        string currentWord = "";
-        cout << "[ ";
-        DFS(root, currentWord);
-        cout << "]\n";
+        TrieNode *current = root;
+
+        for (char &c : word)
+        {
+            if (!current->children[c - 'a'])
+                return nullptr;
+
+            current = current->children[c - 'a'];
+        }
+
+        return current;
     }
 
-    void DFS(TrieNode *root, string &currentWord)
+    void dfs(TrieNode *root, string &currentWord)
     {
         if (root->isWord == true)
             cout << currentWord << " ";
@@ -82,25 +90,51 @@ public:
             if (root->children[c - 'a'])
             {
                 currentWord.push_back(c);
-                DFS(root->children[c - 'a'], currentWord);
+                dfs(root->children[c - 'a'], currentWord);
                 currentWord.pop_back();
             }
         }
+    }
+
+    void recommend(string prefix)
+    {
+        TrieNode *startNode = getStartNode(prefix);
+
+        if (startNode == nullptr)
+        {
+            cout << "Cannot recommend" << endl;
+            return;
+        }
+
+        string currentWord = prefix;
+        cout << "recommendation for " + prefix + " [ ";
+        dfs(startNode, currentWord);
+        cout << "]\n";
+    }
+
+    void print()
+    {
+        string currentWord = "";
+        cout << "[ ";
+        dfs(root, currentWord);
+        cout << "]\n";
     }
 };
 
 int main()
 {
-    vector<string> words = {"look", "watch", "outer", "wish", "design", "watching", "install", "remove", "click", "inner"};
+    vector<string> words = {"look", "watch", "outer", "wish", "design", "watching", "install", "remove", "click", "inner", "walking"};
     vector<string> data = {"click", "cook", "lie", "remove", "home", "wish"};
 
     Trie *trie = new Trie();
 
     for (string &word : words)
-        trie->Insert(word);
+        trie->insert(word);
 
-    trie->printAllWords();
+    trie->print();
+    trie->recommend("wa");
+    trie->recommend("wat");
 
     for (string &word : data)
-        (trie->Search(word) == true) ? cout << word + " exists.\n" : cout << word + " doesn't exist.\n";
+        (trie->search(word) == true) ? cout << word + " exists.\n" : cout << word + " doesn't exist.\n";
 }
