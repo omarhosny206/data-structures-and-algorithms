@@ -17,74 +17,67 @@ public:
         this->val = val;
         this->next = nullptr;
     }
-
-    ListNode(int val, ListNode *next)
-    {
-        this->val = val;
-        this->next = next;
-    }
 };
 
-class LinkedList
+class SinglyLinkedList
 {
 public:
-    ListNode *head, *tail;
-    int numNodes;
+    ListNode *head;
+    int size;
 
-    LinkedList()
+    SinglyLinkedList()
     {
-        this->head = this->tail = nullptr;
-        this->numNodes = 0;
+        head = nullptr;
+        size = 0;
     }
 
-    LinkedList(vector<int> &data)
+    SinglyLinkedList(vector<int> &values)
     {
-        for (int &val : data)
-            Add(val);
+        for (int &val : values)
+            add(val);
     }
 
-    bool isEmpty()
+    void add(int val)
     {
-        return head == nullptr;
-    }
-
-    void Add(int val)
-    {
-        ListNode *node = new ListNode(val);
+        ListNode *newNode = new ListNode(val);
 
         if (isEmpty())
-            head = tail = node;
+            head = newNode;
 
         else
         {
-            tail->next = node;
-            tail = node;
+            ListNode *current = head;
+
+            while (current->next != nullptr)
+                current = current->next;
+
+            current->next = newNode;
         }
 
-        numNodes++;
+        size++;
     }
 
     void addAtFirst(int val)
     {
-        ListNode *node = new ListNode(val);
+        ListNode *newNode = new ListNode(val);
 
         if (isEmpty())
-            head = tail = node;
+            head = newNode;
 
         else
         {
-            node->next = head;
-            head = node;
+            newNode->next = head;
+            head = newNode;
         }
 
-        numNodes++;
+        size++;
     }
 
     void addAtPosition(int val, int position)
     {
-        if (position < 0 || position > numNodes)
+        if (position < 0 || position > size)
         {
-            cout << "Out Of Boundary!" << endl;
+            cout << "Out Of Boundary" << endl;
             return;
         }
 
@@ -94,94 +87,88 @@ public:
             return;
         }
 
-        else if (position == numNodes)
+        else if (position == size)
         {
-            Add(val);
+            add(val);
             return;
         }
 
-        ListNode *node = new ListNode(val);
+        ListNode *newNode = new ListNode(val);
         ListNode *current = head;
 
         while (--position)
             current = current->next;
 
-        node->next = current->next;
-        current->next = node;
+        newNode->next = current->next;
+        current->next = newNode;
 
-        numNodes++;
+        size++;
     }
 
-    void Delete()
+    void remove()
     {
         if (isEmpty())
         {
-            cout << "Linked List is already empty!" << endl;
+            cout << "Linked List is empty" << endl;
             return;
         }
 
-        if (numNodes == 1)
-            head = tail = nullptr;
+        if (size == 1)
+            head = nullptr;
 
         else
         {
             ListNode *current = head;
 
-            while (current->next != tail)
+            while (current->next->next != nullptr)
                 current = current->next;
 
             current->next = nullptr;
-            delete tail;
-            tail = current;
         }
 
-        numNodes--;
+        size--;
     }
 
-    void deleteAtFirst()
+    void removeAtFirst()
     {
         if (isEmpty())
         {
-            cout << "Linked List is already empty!" << endl;
+            cout << "Linked List is empty" << endl;
             return;
         }
 
-        if (numNodes == 1)
-            head = tail = nullptr;
+        if (size == 1)
+            head = nullptr;
 
         else
-        {
-            ListNode *current = head->next;
-            delete head;
-            head = current;
-        }
+            head = head->next;
 
-        numNodes--;
+        size--;
     }
 
-    void deleteAtPosition(int position)
+    void removeAtPosition(int position)
     {
-        if (isEmpty())
+        if (position < 0 || position >= size)
         {
-            cout << "Linked List is already empty!" << endl;
+            cout << "Out Of Boundary" << endl;
             return;
         }
 
-        if (position < 0 || position >= numNodes)
+        if (isEmpty())
         {
-            cout << "Out Of Boundary!" << endl;
+            cout << "Linked List is empty" << endl;
             return;
         }
 
         if (position == 0)
         {
-            deleteAtFirst();
+            removeAtFirst();
             return;
         }
 
-        else if (position == numNodes - 1)
+        else if (position == size - 1)
         {
-            Delete();
+            remove();
             return;
         }
 
@@ -190,17 +177,15 @@ public:
         while (--position)
             current = current->next;
 
-        ListNode *temp = current->next;
+        ListNode *nodeToRemove = current->next;
+        current->next = nodeToRemove->next;
 
-        current->next = temp->next;
-        delete temp;
-
-        numNodes--;
+        size--;
     }
 
-    void deleteByValue(int val)
+    void removeByValue(int val)
     {
-        int position = Search(val);
+        int position = search(val);
 
         if (position == -1)
         {
@@ -208,10 +193,10 @@ public:
             return;
         }
 
-        deleteAtPosition(position);
+        removeAtPosition(position);
     }
 
-    int Search(int target)
+    int search(int target)
     {
         if (isEmpty())
             return -1;
@@ -232,15 +217,13 @@ public:
         return -1;
     }
 
-    void Reverse()
+    void reverse()
     {
         if (isEmpty())
         {
-            cout << "Linked List is already empty!" << endl;
+            cout << "Linked List is empty" << endl;
             return;
         }
-
-        tail = head;
 
         ListNode *current = head;
         ListNode *next = nullptr;
@@ -257,7 +240,12 @@ public:
         head = previous;
     }
 
-    void Print()
+    bool isEmpty()
+    {
+        return head == nullptr;
+    }
+
+    void print()
     {
         if (isEmpty())
         {
@@ -280,24 +268,24 @@ public:
 int main()
 {
     vector<int> data = {5, 10, 15, 20, 25, 30};
-    LinkedList *linkedList = new LinkedList(data);
-    linkedList->Print();
+    SinglyLinkedList *linkedList = new SinglyLinkedList(data);
+    linkedList->print();
     linkedList->addAtFirst(0);
-    linkedList->Add(35);
-    linkedList->Print();
+    linkedList->add(35);
+    linkedList->print();
     linkedList->addAtPosition(100, 3);
     linkedList->addAtPosition(200, 5);
-    linkedList->Print();
+    linkedList->print();
 
-    linkedList->deleteAtFirst();
-    linkedList->Print();
-    linkedList->Delete();
-    linkedList->Print();
-    linkedList->deleteAtPosition(4);
-    linkedList->Print();
-    linkedList->deleteByValue(25);
-    linkedList->Print();
+    linkedList->removeAtFirst();
+    linkedList->print();
+    linkedList->remove();
+    linkedList->print();
+    linkedList->removeAtPosition(4);
+    linkedList->print();
+    linkedList->removeByValue(25);
+    linkedList->print();
 
-    linkedList->Reverse();
-    linkedList->Print();
+    linkedList->reverse();
+    linkedList->print();
 }
