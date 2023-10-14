@@ -39,6 +39,12 @@ public:
         head = tail = newNode;
     }
 
+    Queue(vector<int> &values)
+    {
+        for (int &val : values)
+            enqueue(val);
+    }
+
     void enqueue(int val)
     {
         QueueNode *newNode = new QueueNode(val);
