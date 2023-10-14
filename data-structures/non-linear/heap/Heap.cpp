@@ -4,12 +4,12 @@ using namespace std;
 class Comparator
 {
 public:
-    virtual bool Compare(int first, int second) = 0;
+    virtual bool compare(int first, int second) = 0;
 };
 
 class MaxComparator : public Comparator
 {
-    bool Compare(int first, int second)
+    bool compare(int first, int second)
     {
         return first > second;
     }
@@ -17,7 +17,7 @@ class MaxComparator : public Comparator
 
 class MinComparator : public Comparator
 {
-    bool Compare(int first, int second)
+    bool compare(int first, int second)
     {
         return first < second;
     }
@@ -30,26 +30,26 @@ private:
     Comparator *comparator;
 
 public:
-    Heap(vector<int> &data, Comparator *comparator)
+    Heap(vector<int> &values, Comparator *comparator)
     {
         this->comparator = comparator;
 
-        for (int &num : data)
-            Insert(num);
+        for (int &val : values)
+            insert(val);
     }
 
-    void Insert(int &num)
+    void insert(int &val)
     {
-        heap.push_back(num);
+        heap.push_back(val);
         int index = heap.size() - 1;
         heapifyUp(index);
     }
 
-    void Delete()
+    void remove()
     {
         if (isEmpty())
         {
-            cout << "Heap is empty!" << endl;
+            cout << "Heap is empty" << endl;
             return;
         }
 
@@ -58,11 +58,11 @@ public:
         heapifyDown(0);
     }
 
-    int Top()
+    int getTop()
     {
         if (isEmpty())
         {
-            cout << "Heap is empty!" << endl;
+            cout << "Heap is empty" << endl;
             return -1;
         }
 
@@ -74,10 +74,10 @@ public:
         if (index == 0)
             return;
 
-        int parentIndex = Parent(index);
-        if (comparator->Compare(heap[index], heap[parentIndex]))
+        int parentIndex = parent(index);
+        if (comparator->compare(heap[index], heap[parentIndex]))
         {
-            Swap(index, parentIndex);
+            swap(index, parentIndex);
             heapifyUp(parentIndex);
         }
     }
@@ -87,49 +87,49 @@ public:
         if (isValidLeaf(index))
             return;
 
-        int largestNumberIndex = index;
-        int leftIndex = Left(index);
-        int rightIndex = Right(index);
+        int largestValueIndex = index;
+        int leftIndex = left(index);
+        int rightIndex = right(index);
 
-        if (comparator->Compare(heap[leftIndex], heap[largestNumberIndex]))
-            largestNumberIndex = leftIndex;
+        if (comparator->compare(heap[leftIndex], heap[largestValueIndex]))
+            largestValueIndex = leftIndex;
 
-        if (comparator->Compare(heap[rightIndex], heap[largestNumberIndex]))
-            largestNumberIndex = rightIndex;
+        if (comparator->compare(heap[rightIndex], heap[largestValueIndex]))
+            largestValueIndex = rightIndex;
 
-        if (largestNumberIndex != index)
+        if (largestValueIndex != index)
         {
-            Swap(index, largestNumberIndex);
-            heapifyDown(largestNumberIndex);
+            swap(index, largestValueIndex);
+            heapifyDown(largestValueIndex);
         }
     }
 
-    void Sort()
+    void sort()
     {
         if (isEmpty())
         {
-            cout << "Heap is empty!" << endl;
+            cout << "Heap is empty" << endl;
             return;
         }
 
         while (!isEmpty())
         {
-            cout << Top() << " ";
-            Delete();
+            cout << getTop() << " ";
+            remove();
         }
     }
 
-    int Parent(int index)
+    int parent(int index)
     {
         return (index - 1) / 2;
     }
 
-    int Left(int index)
+    int left(int index)
     {
         return (index * 2) + 1;
     }
 
-    int Right(int &index)
+    int right(int &index)
     {
         return (index * 2) + 2;
     }
@@ -141,7 +141,7 @@ public:
 
     bool isValidLeaf(int index)
     {
-        return !isValidIndex(Left(index)) && !isValidIndex(Right(index));
+        return !isValidIndex(left(index)) && !isValidIndex(right(index));
     }
 
     bool isValidIndex(int index)
@@ -149,7 +149,7 @@ public:
         return index < heap.size();
     }
 
-    void Swap(int i, int j)
+    void swap(int i, int j)
     {
         int temp = heap[i];
         heap[i] = heap[j];
@@ -164,9 +164,9 @@ int main()
     Heap *minHeap = new Heap(data, new MinComparator());
     Heap *maxHeap = new Heap(data, new MaxComparator());
 
-    minHeap->Sort();
+    minHeap->sort();
     cout << endl;
 
-    maxHeap->Sort();
+    maxHeap->sort();
     cout << endl;
 }
