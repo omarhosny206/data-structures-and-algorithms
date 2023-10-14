@@ -189,7 +189,7 @@ public:
 
         if (position == -1)
         {
-            cout << "Value is not here!" << endl;
+            cout << "Value doesn't exist" << endl;
             return;
         }
 
