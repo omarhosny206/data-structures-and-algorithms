@@ -37,6 +37,12 @@ public:
         top = new StackNode(val);
     }
 
+    Stack(vector<int> &values)
+    {
+        for (int &val : values)
+            push(val);
+    }
+
     void push(int val)
     {
         StackNode *newTop = new StackNode(val);
