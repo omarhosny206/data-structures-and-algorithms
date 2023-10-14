@@ -17,67 +17,61 @@ public:
         this->val = val;
         next = nullptr;
     }
-
-    QueueNode(int val, QueueNode *next)
-    {
-        this->val = val;
-        this->next = next;
-    }
 };
 
 class Queue
 {
 private:
-    QueueNode *head, *tail;
-    int counter;
+    QueueNode *head;
+    QueueNode *tail;
+    int size;
 
 public:
     Queue()
     {
         head = tail = nullptr;
-        counter = 0;
+        size = 0;
     }
 
     Queue(int val)
     {
-        QueueNode *node = new QueueNode(val);
-        head = tail = node;
-        counter++;
+        QueueNode *newNode = new QueueNode(val);
+        head = tail = newNode;
     }
 
-    void Enqueue(int val)
+    void enqueue(int val)
     {
-        QueueNode *node = new QueueNode(val);
-        counter++;
+        QueueNode *newNode = new QueueNode(val);
 
         if (isEmpty())
         {
-            head = tail = node;
-            return;
+            head = tail = newNode;
         }
-
-        tail->next = node;
-        tail = node;
+        else
+        {
+            tail->next = newNode;
+            tail = newNode;
+        }
+        size++;
     }
 
-    void Dequeue()
+    void dequeue()
     {
         if (isEmpty())
         {
-            cout << "Queue is empty!" << endl;
+            cout << "Queue is empty" << endl;
             return;
         }
 
-        QueueNode *current = head->next;
-        head = current;
+        QueueNode *nextNode = head->next;
+        head = nextNode;
+        size--;
 
-        if (counter == 1)
-            tail = head;
-
-        counter--;
+        if (size == 0)
+            tail = head = nullptr;
     }
 
-    bool Search(int target)
+    bool search(int target)
     {
         QueueNode *current = head;
 
@@ -96,7 +90,7 @@ public:
     {
         if (isEmpty())
         {
-            cout << "Queue is empty --> ";
+            cout << "Queue is empty" << endl;
             return -1;
         }
 
@@ -107,7 +101,7 @@ public:
     {
         if (isEmpty())
         {
-            cout << "Queue is empty --> ";
+            cout << "Queue is empty" << endl;
             return -1;
         }
 
@@ -119,19 +113,13 @@ public:
         return head == nullptr;
     }
 
-    int countNodes()
+    int getSize()
     {
-        return counter;
+        return size;
     }
 
-    void Print()
+    void print()
     {
-        if (isEmpty())
-        {
-            cout << "Queue is empty!" << endl;
-            return;
-        }
-
         QueueNode *current = head;
 
         while (current != nullptr)
@@ -147,28 +135,28 @@ public:
 int main()
 {
     Queue *queue = new Queue();
-    queue->Enqueue(10);
-    queue->Enqueue(20);
-    queue->Enqueue(30);
-    queue->Print();
+    queue->enqueue(10);
+    queue->enqueue(20);
+    queue->enqueue(30);
+    queue->print();
 
-    queue->Dequeue();
-    queue->Print();
+    queue->dequeue();
+    queue->print();
 
-    queue->Dequeue();
-    queue->Print();
+    queue->dequeue();
+    queue->print();
 
-    queue->Dequeue();
-    queue->Print();
+    queue->dequeue();
+    queue->print();
 
-    queue->Enqueue(100);
-    queue->Enqueue(200);
-    queue->Print();
+    queue->enqueue(100);
+    queue->enqueue(200);
+    queue->print();
 
     cout << queue->getBack() << endl;
     cout << queue->getFront() << endl;
-    cout << queue->countNodes() << endl;
+    cout << queue->getSize() << endl;
 
-    cout << queue->Search(200) << endl;
-    cout << queue->Search(150) << endl;
+    cout << queue->search(200) << endl;
+    cout << queue->search(150) << endl;
 }
