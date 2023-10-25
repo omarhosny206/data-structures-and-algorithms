@@ -1,6 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+class Logger
+{
+public:
+    static void info(string message)
+    {
+        cout << message << endl;
+    }
+};
+
 class ListNode
 {
 public:
@@ -21,10 +30,11 @@ public:
 
 class SinglyLinkedList
 {
-public:
+private:
     ListNode *head;
     int size;
 
+public:
     SinglyLinkedList()
     {
         head = nullptr;
@@ -39,6 +49,7 @@ public:
 
     void add(int val)
     {
+        Logger::info("Add " + to_string(val));
         ListNode *newNode = new ListNode(val);
 
         if (isEmpty())
@@ -59,6 +70,7 @@ public:
 
     void addAtFirst(int val)
     {
+        Logger::info("Add " + to_string(val) + " at first");
         ListNode *newNode = new ListNode(val);
 
         if (isEmpty())
@@ -76,10 +88,7 @@ public:
     void addAtPosition(int val, int position)
     {
         if (position < 0 || position > size)
-        {
-            cout << "Out Of Boundary" << endl;
-            return;
-        }
+            throw runtime_error("Cannot add at position (" + to_string(position) + "), out of the linked-list's boundary.");
 
         if (position == 0)
         {
@@ -93,6 +102,7 @@ public:
             return;
         }
 
+        Logger::info("Add " + to_string(val) + " at position (" + to_string(position) + ")");
         ListNode *newNode = new ListNode(val);
         ListNode *current = head;
 
@@ -108,10 +118,9 @@ public:
     void remove()
     {
         if (isEmpty())
-        {
-            cout << "Linked List is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot remove, the linked-list  is empty.");
+
+        Logger::info("Remove");
 
         if (size == 1)
             head = nullptr;
@@ -132,10 +141,9 @@ public:
     void removeAtFirst()
     {
         if (isEmpty())
-        {
-            cout << "Linked List is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot remove at first, the linked-list is empty.");
+
+        Logger::info("Remove at first");
 
         if (size == 1)
             head = nullptr;
@@ -149,16 +157,10 @@ public:
     void removeAtPosition(int position)
     {
         if (position < 0 || position >= size)
-        {
-            cout << "Out Of Boundary" << endl;
-            return;
-        }
+            throw runtime_error("Cannot remove at position (" + to_string(position) + "), out of the linked-list's boundary.");
 
         if (isEmpty())
-        {
-            cout << "Linked List is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot remove at position (" + to_string(position) + "), the linked-list is empty.");
 
         if (position == 0)
         {
@@ -171,6 +173,8 @@ public:
             remove();
             return;
         }
+
+        Logger::info("Remove at position (" + to_string(position) + ")");
 
         ListNode *current = head;
 
@@ -188,10 +192,7 @@ public:
         int position = search(val);
 
         if (position == -1)
-        {
-            cout << "Value doesn't exist" << endl;
-            return;
-        }
+            throw runtime_error("Cannot remove by value (" + to_string(val) + "), the value doesn't exist in the linked-list.");
 
         removeAtPosition(position);
     }
@@ -220,10 +221,9 @@ public:
     void reverse()
     {
         if (isEmpty())
-        {
-            cout << "Linked List is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot reverse, the linked-list is empty.");
+
+        Logger::info("Reverse");
 
         ListNode *current = head;
         ListNode *next = nullptr;
@@ -247,12 +247,7 @@ public:
 
     void print()
     {
-        if (isEmpty())
-        {
-            cout << "Linked List is already empty!" << endl;
-            return;
-        }
-
+        Logger::info("Print");
         ListNode *current = head;
 
         while (current != nullptr)
@@ -267,23 +262,29 @@ public:
 
 int main()
 {
-    vector<int> data = {5, 10, 15, 20, 25, 30};
-    SinglyLinkedList *linkedList = new SinglyLinkedList(data);
+    vector<int> values = {5, 10, 15, 20, 25, 30};
+    SinglyLinkedList *linkedList = new SinglyLinkedList(values);
+
     linkedList->print();
+
     linkedList->addAtFirst(0);
     linkedList->add(35);
+
     linkedList->print();
+
     linkedList->addAtPosition(100, 3);
     linkedList->addAtPosition(200, 5);
+
     linkedList->print();
 
     linkedList->removeAtFirst();
-    linkedList->print();
     linkedList->remove();
+
     linkedList->print();
+
     linkedList->removeAtPosition(4);
-    linkedList->print();
     linkedList->removeByValue(25);
+
     linkedList->print();
 
     linkedList->reverse();
