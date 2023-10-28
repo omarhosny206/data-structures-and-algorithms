@@ -61,20 +61,20 @@ public:
         size++;
     }
 
-    void dequeue()
+    int dequeue()
     {
         if (isEmpty())
-        {
-            cout << "Queue is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot dequeue, the queue is empty.");
 
+        QueueNode *temp = head;
         QueueNode *nextNode = head->next;
         head = nextNode;
         size--;
 
         if (size == 0)
             tail = head = nullptr;
+
+        return temp->val;
     }
 
     bool search(int target)
@@ -95,10 +95,7 @@ public:
     int getFront()
     {
         if (isEmpty())
-        {
-            cout << "Queue is empty" << endl;
-            return -1;
-        }
+            throw runtime_error("Cannot get front, the queue is empty.");
 
         return head->val;
     }
@@ -106,10 +103,7 @@ public:
     int getBack()
     {
         if (isEmpty())
-        {
-            cout << "Queue is empty" << endl;
-            return -1;
-        }
+            throw runtime_error("Cannot get back, the queue is empty.");
 
         return tail->val;
     }
@@ -140,29 +134,23 @@ public:
 
 int main()
 {
-    Queue *queue = new Queue();
-    queue->enqueue(10);
-    queue->enqueue(20);
-    queue->enqueue(30);
+    vector<int> values = {10, 20, 30};
+    Queue *queue = new Queue(values);
+    queue->enqueue(40);
+
+    cout << "Print: " << endl;
     queue->print();
 
-    queue->dequeue();
+    cout << "Dequeue: " << queue->dequeue() << endl;
+    cout << "Dequeue: " << queue->dequeue() << endl;
+
+    cout << "Print: " << endl;
     queue->print();
 
-    queue->dequeue();
-    queue->print();
+    cout << "Front: " << queue->getFront() << endl;
+    cout << "Back: " << queue->getBack() << endl;
+    cout << "Size: " << queue->getSize() << endl;
 
-    queue->dequeue();
-    queue->print();
-
-    queue->enqueue(100);
-    queue->enqueue(200);
-    queue->print();
-
-    cout << queue->getBack() << endl;
-    cout << queue->getFront() << endl;
-    cout << queue->getSize() << endl;
-
-    cout << queue->search(200) << endl;
-    cout << queue->search(150) << endl;
+    cout << "Search for 30: " << queue->search(30) << endl;
+    cout << "Search for 50: " << queue->search(50) << endl;
 }
