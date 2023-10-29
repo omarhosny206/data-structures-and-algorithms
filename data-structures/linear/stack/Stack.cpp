@@ -120,8 +120,8 @@ int main()
     stack->print();
     cout << endl;
 
-    cout << "Search for value 10: " << stack->search(10) << endl;
-    cout << "Search for value 8: " << stack->search(8) << endl;
+    cout << "Search for 10: " << stack->search(10) << endl;
+    cout << "Search for 8: " << stack->search(8) << endl;
     cout << endl;
 
     cout << "Pop: " << stack->pop() << endl;
