@@ -38,3 +38,15 @@ When working with stacks, keep in mind the following best practices:
 - Use a stack when you need to maintain a last-in, first-out order of elements.
 - Ensure that you always check if the stack is empty before popping an element to avoid stack underflow.
 - Be mindful of the stack's size to prevent stack overflow, especially in resource-constrained environments.
+
+## Complexity
+
+| Operation   | Time Complexity | Space Complexity |
+|:------------:|:----------------:|:-----------------:|
+| push         | O(1)           | O(1)             |
+| pop          | O(1)           | O(1)             |
+| search       | O(N)           | O(1)             |
+| getTop       | O(1)           | O(1)             |
+| isEmpty      | O(1)           | O(1)             |
+| getSize      | O(1)           | O(1)             |
+| print        | O(N)           | O(1)             |
