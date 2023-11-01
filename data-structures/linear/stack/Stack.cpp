@@ -51,16 +51,15 @@ public:
         size++;
     }
 
-    void pop()
+    int pop()
     {
         if (isEmpty())
-        {
-            cout << "Stack is empty" << endl;
-            return;
-        }
+            throw runtime_error("Cannot pop, the stack is empty.");
 
+        StackNode *temp = top;
         top = top->next;
         size--;
+        return temp->val;
     }
 
     bool search(int target)
@@ -81,10 +80,7 @@ public:
     int getTop()
     {
         if (isEmpty())
-        {
-            cout << "Stack is empty" << endl;
-            return -1;
-        }
+            throw runtime_error("Cannot get top, the stack is empty.");
 
         return top->val;
     }
@@ -113,30 +109,28 @@ public:
 
 int main()
 {
-    Stack *stack = new Stack();
-    stack->pop();
-    stack->push(5);
-    stack->push(10);
-    stack->push(15);
-    stack->push(20);
-    stack->push(25);
+    vector<int> values = {5, 10, 15, 20, 25};
+    Stack *stack = new Stack(values);
 
-    cout << stack->search(10) << endl;
-    cout << stack->search(8) << endl;
+    stack->push(30);
+
+    cout << "Top: " << stack->getTop() << endl;
+
+    cout << "Print: " << endl;
+    stack->print();
     cout << endl;
 
-    stack->pop();
-    cout << stack->getTop() << endl
-         << endl;
+    cout << "Search for value 10: " << stack->search(10) << endl;
+    cout << "Search for value 8: " << stack->search(8) << endl;
+    cout << endl;
 
-    stack->print();
-    cout << endl
-         << endl;
+    cout << "Pop: " << stack->pop() << endl;
+    cout << "Top: " << stack->getTop() << endl;
 
-    stack->pop();
-    stack->pop();
-    stack->pop();
-    stack->pop();
+    cout << "Pop: " << stack->pop() << endl;
+    cout << "Pop: " << stack->pop() << endl;
+    cout << "Pop: " << stack->pop() << endl;
+    cout << "Pop: " << stack->pop() << endl;
 
-    cout << stack->getTop() << endl;
+    cout << "Top: " << stack->getTop() << endl;
 }
